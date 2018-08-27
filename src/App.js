@@ -1,36 +1,82 @@
 import React from 'react'
-import { Container, Table, Grid, Image } from 'semantic-ui-react'
-import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
+import { Container, Table, Grid, Image, Form, Button, Message, Menu, List } from 'semantic-ui-react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
-const Menu = () => {
-  const menyStyle = {
-    backgroundColor: '#C5C2EE',
-    fontSize: '20',
-    fontFamily: 'sans-serif',
-    paddingTop: '0.5em',
-    paddingBottom: '0.5em'
+class ColorMeny extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { active: 'anecdotes' }
+  }
+  handleAClick = (e, { name }) => {
+    this.setState({ active: name })
+  }
+  // const menyStyle = {
+  //   backgroundColor: '#C5C2EE',
+  //   fontSize: '20',
+  //   fontFamily: 'sans-serif',
+  //   paddingTop: '0.5em',
+  //   paddingBottom: '0.5em'
+  // }
+
+  // const menyActive = {
+  //   backgroundColor: '#9B96E1',
+  //   padding: '0.5em',
+  //   marginTop: '0.5em',
+  //   textDecoration: 'none'
+  // }
+
+  // const linkStyle = {
+  //   color: 'white',
+  //   padding: '0.5em',
+  //   marginTop: '0.5em',
+  //   textDecoration: 'none'
+  // }
+  render() {
+    return (
+      <div>
+        <Menu inverted>
+          <Menu.Item
+            as={Link}
+            exact to={'/'}
+            key={'anecdotes'}
+            name={'anecdotes'}
+            active={this.state.active === 'anecdotes'}
+            color={'red'}
+            onClick={this.handleAClick}
+
+          >
+            Anecdotes
+          </Menu.Item>
+          <Menu.Item
+            as={Link}
+            exact to={'/create'}
+            key={'create'}
+            name={'create'}
+            active={this.state.active === 'create'}
+            color={'green'}
+            onClick={this.handleAClick}
+
+          >
+            Create new
+          </Menu.Item>
+          <Menu.Item
+            as={Link}
+            exact to={'/about'}
+            key={'about'}
+            name={'about'}
+            active={this.state.active === 'about'}
+            color={'blue'}
+            onClick={this.handleAClick}
+
+          >
+            About
+          </Menu.Item>
+        </Menu>
+      </div>
+
+    )
   }
 
-  const menyActive = {
-    backgroundColor: '#9B96E1',
-    padding: '0.5em',
-    marginTop: '0.5em',
-    textDecoration: 'none'
-  }
-
-  const linkStyle = {
-    color: 'white',
-    padding: '0.5em',
-    marginTop: '0.5em',
-    textDecoration: 'none'
-  }
-  return (
-    <div style={menyStyle}>
-      <NavLink exact to="/" style={linkStyle} activeStyle={menyActive}>Anecdotes</NavLink>
-      <NavLink exact to="/create" style={linkStyle} activeStyle={menyActive}>Create new</NavLink>
-      <NavLink exact to="/about" style={linkStyle} activeStyle={menyActive}>About</NavLink>
-    </div>
-  )
 }
 
 
@@ -55,9 +101,28 @@ const AnecdoteList = ({ anecdotes }) => (
 const Anecdote = ({ anecdote }) => {
   return (
     <div>
-      <h2>{anecdote.content} by {anecdote.author}</h2>
-      <div>has {anecdote.votes} votes</div>
-      <div>for more info see <a href={anecdote.info}>{anecdote.info}</a></div>
+      <Table striped>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>
+              <h2>{anecdote.content} by {anecdote.author}</h2>
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>
+              has {anecdote.votes} votes
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>
+              for more info see <a href={anecdote.info}>{anecdote.info}</a>
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+
+
+
     </div>
   )
 }
@@ -84,25 +149,38 @@ const About = () => (
 )
 
 const Footer = () => (
-  <div>
-    Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
-
-    See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code.
-  </div>
+  <List>
+    <List.Item>
+      <List.Header>
+        App purpose
+      </List.Header>
+      <List.Description>
+        Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
+      </List.Description>
+    </List.Item>
+    <List.Item>
+      <List.Header>
+        Source code
+      </List.Header>
+      <List.Description>
+        See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code.
+      </List.Description>
+    </List.Item>
+  </List>
 )
 
-const Notification = (props) => {
-  const notificationStyle = {
-    backgroundColor: '#97E285',
-    color: 'white',
-    fontFamily: 'sans-serif',
-    padding: '0.5em',
-    marginTop: '0.5em'
-  }
-  return (<div style={notificationStyle}>
-    {props.message}
-  </div>)
-}
+// const Notification = (props) => {
+//   const notificationStyle = {
+//     backgroundColor: '#97E285',
+//     color: 'white',
+//     fontFamily: 'sans-serif',
+//     padding: '0.5em',
+//     marginTop: '0.5em'
+//   }
+//   return (<div style={notificationStyle}>
+//     {props.message}
+//   </div>)
+// }
 
 class CreateNew extends React.Component {
   constructor() {
@@ -138,22 +216,22 @@ class CreateNew extends React.Component {
   render() {
     return (
       <div>
-        <h2>create a new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            content
+        <h2>Create a new anecdote</h2>
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Field>
+            <label>content</label>
             <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
+          </Form.Field>
+          <Form.Field>
+            <label>author</label>
             <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
+          </Form.Field>
+          <Form.Field>
+            <label>url for more info</label>
             <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div>
-          <button>create</button>
-        </form>
+          </Form.Field>
+          <Button type='submit'>create</Button>
+        </Form>
       </div>
     )
 
@@ -221,8 +299,8 @@ class App extends React.Component {
           <Router>
             <div>
               <h1>Software anecdotes</h1>
-              <Menu />
-              {this.state.notification !== '' && <Notification message={this.state.notification} />}
+              <ColorMeny />
+              {this.state.notification !== '' && <Message success>{this.state.notification}</Message>}
               <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
               <Route exact path="/create" render={({ history }) => <CreateNew history={history} addNew={this.addNew} />} />
               <Route exact path="/about" render={() => <About />} />
