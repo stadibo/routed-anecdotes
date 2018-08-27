@@ -1,19 +1,45 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
 
-const Menu = () => (
-  <div>
-    <Link to="/">anecdotes</Link> &nbsp;
-    <Link to="/create">create new</Link> &nbsp;
-    <Link to="/about">about</Link> &nbsp;
-  </div>
-)
+const Menu = () => {
+  const menyStyle = {
+    backgroundColor: '#C5C2EE',
+    
+    fontSize: '20',
+    fontFamily: 'sans-serif',
+    paddingTop: '0.5em',
+    paddingBottom: '0.5em'
+  }
+
+  const menyActive = {
+    backgroundColor: '#9B96E1',
+    padding: '0.5em',
+    marginTop: '0.5em',
+    textDecoration: 'none'
+  }
+
+  const linkStyle = {
+    color: 'white',
+    padding: '0.5em',
+    marginTop: '0.5em',
+    textDecoration: 'none'
+  }
+  return (
+    <div style={menyStyle}>
+      <NavLink exact to="/" style={linkStyle} activeStyle={menyActive}>Anecdotes</NavLink>
+      <NavLink exact to="/create" style={linkStyle} activeStyle={menyActive}>Create new</NavLink>
+      <NavLink exact to="/about" style={linkStyle} activeStyle={menyActive}>About</NavLink>
+    </div>
+  )
+}
+
+
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => 
+      {anecdotes.map(anecdote =>
         <li key={anecdote.id}>
           <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
         </li>
@@ -54,11 +80,18 @@ const Footer = () => (
   </div>
 )
 
-const Notification = (props) => (
-  <div>
+const Notification = (props) => {
+  const notificationStyle = {
+    backgroundColor: '#97E285',
+    color: 'white',
+    fontFamily: 'sans-serif',
+    padding: '0.5em',
+    marginTop: '0.5em'
+  }
+  return (<div style={notificationStyle}>
     {props.message}
-  </div>
-)
+  </div>)
+}
 
 class CreateNew extends React.Component {
   constructor() {
@@ -177,11 +210,11 @@ class App extends React.Component {
           <div>
             <h1>Software anecdotes</h1>
             <Menu />
-            <Notification message={this.state.notification}/>
+            {this.state.notification !== '' && <Notification message={this.state.notification} />}
             <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-            <Route exact path="/create" render={({history}) => <CreateNew history={history} addNew={this.addNew} />} />
+            <Route exact path="/create" render={({ history }) => <CreateNew history={history} addNew={this.addNew} />} />
             <Route exact path="/about" render={() => <About />} />
-            <Route exact path="/anecdotes/:id" render={({match}) => 
+            <Route exact path="/anecdotes/:id" render={({ match }) =>
               <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
             />
             <Footer />
